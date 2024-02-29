@@ -368,6 +368,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MusicController.cs" />
+    <Compile Include="PhaseChangeCollisionCheck.cs" />
     <Compile Include="TimerController.cs" />
     <Compile Include="UltrakillTimerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -31,11 +31,16 @@ namespace UltrakillTimer
 		public void Update()
 		{
 			_timer += Time.deltaTime;
+
+			float _ftimer = _timer;
+			if (MusicController.InstanceExists())
+				_ftimer = MusicController.Time;
+
 			float remainingTime = timerEnd.timeUntilClamped;
 			string[] timerstr = remainingTime.ToString(CultureInfo.InvariantCulture).Split('.');
 			timerText.text = $"{timerstr[0]}<size=40%>.{timerstr[1].Substring(0, timerstr[1].Length > 2 ? 2 : timerstr[1].Length)}";
-			timerText.color = Color.Lerp(flashColor, originalColor, _timer % (fadeTime + delay));
-			headerText.color = Color.Lerp(flashColor, originalColor, _timer % (fadeTime + delay));
+			timerText.color = Color.Lerp(flashColor, originalColor, _ftimer % fadeTime + delay);
+			headerText.color = Color.Lerp(flashColor, originalColor, _ftimer % fadeTime + delay);
 		}
 
 		public void ResetTimer()
