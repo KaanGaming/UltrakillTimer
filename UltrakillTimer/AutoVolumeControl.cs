@@ -30,16 +30,15 @@ namespace UltrakillTimer
 		private float _volume;
 		private float _volumemod;
 
-		private void FixedUpdate()
+		private void Update()
 		{
-			// the game sets timestep to 0.00 when the game is paused so we use FixedUpdate to keep updating volume
 			object volmasterconvar = _volmaster.GetValue(null); // the classes are PRIVATE so we have to use object because we cant use the subclass
 			float volmaster = float.Parse(volmasterconvar.InvokeMethod<string>("GetString"), CultureInfo.InvariantCulture) / 100f;
 			object volmsxconvar = _volmusic.GetValue(null);
 			float volmusic = float.Parse(volmsxconvar.InvokeMethod<string>("GetString"), CultureInfo.InvariantCulture) / 100f;
 
-			//_volume = volmaster * volmusic;
-			_audiosrc.volume = volmaster * volmusic;
+			_volume = volmaster * volmusic;
+			_audiosrc.volume = volmaster * volmusic * _volumemod;
 		}
 
 		private void OnDestroy()
@@ -50,12 +49,14 @@ namespace UltrakillTimer
 
 		private void OnUnpause(On.RoR2.UI.PauseScreenController.orig_OnDisable orig, RoR2.UI.PauseScreenController self)
 		{
+			UltrakillTimerPlugin.LogDebug("Unpaused! Adjusting volume mod to 1f");
 			orig(self);
 			StartCoroutine(ChangeVolumeGradually(1f, 0.5f));
 		}
 
 		private void OnPause(On.RoR2.UI.PauseScreenController.orig_OnEnable orig, RoR2.UI.PauseScreenController self)
 		{
+			UltrakillTimerPlugin.LogDebug("Paused! Adjusting volume mod to 0.25f");
 			orig(self);
 			StartCoroutine(ChangeVolumeGradually(0.25f, 0.5f));
 		}
@@ -66,8 +67,10 @@ namespace UltrakillTimer
 			float oldvolumemod = _volumemod;
 			while (ct < t)
 			{
+				UltrakillTimerPlugin.LogDebug($"{Time.unscaledDeltaTime} : {ct} / {t} .. {_volumemod} to {volume}");
 				ct += Time.unscaledDeltaTime;
 				_volumemod = Mathf.Lerp(oldvolumemod, volume, ct / t);
+				_audiosrc.volume = _volume * _volumemod;
 				yield return new WaitForEndOfFrame();
 			}
 		}

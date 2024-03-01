@@ -13,6 +13,8 @@ using R2API.Utils;
 using MonoMod.RuntimeDetour;
 using UnityEngine.SceneManagement;
 using BepInEx.Logging;
+using System.Collections;
+using UltrakillTimer.Utils;
 
 namespace UltrakillTimer
 {
@@ -74,6 +76,11 @@ namespace UltrakillTimer
 		{
 			_log.LogWarning(msg);
 		}
+
+		internal static void LogDebug(string msg)
+		{
+			_log.LogDebug(msg);
+		}
 		#endregion
 
 		public void Update()
@@ -97,6 +104,13 @@ namespace UltrakillTimer
 			orig(self);
 			_endtime = self.GetFieldValue<Run.FixedTimeStamp>("endTime");
 			MusicController.PlayPhase(1);
+			CoroutineRunner.RunCoroutine(AttachPhaseChangeChecks(), 1f);
+		}
+
+		private IEnumerator AttachPhaseChangeChecks()
+		{
+			yield return new WaitForSeconds(0.25f);
+			PhaseChangeCollisionCheck.AddComponentToPortals();
 		}
 
 		private void SetHUDCountdownEnabled(On.RoR2.EscapeSequenceController.orig_SetHudCountdownEnabled orig, EscapeSequenceController self, RoR2.UI.HUD hud, bool shouldEnableCountdownPanel)
