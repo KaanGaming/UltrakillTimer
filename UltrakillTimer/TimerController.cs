@@ -18,6 +18,8 @@ namespace UltrakillTimer
 		public Color flashColor;
 		public float fadeTime;
 		public float delay;
+		public bool useCustomTimerEnd = false;
+		public float customTimerEnd;
 		//public AudioSource sync;
 		private TextMeshProUGUI timerText;
 		private TextMeshProUGUI headerText;
@@ -36,7 +38,9 @@ namespace UltrakillTimer
 			if (MusicController.InstanceExists())
 				_ftimer = MusicController.Time;
 
-			float remainingTime = timerEnd.timeUntilClamped;
+			float endtime = useCustomTimerEnd ? customTimerEnd - _timer : timerEnd.timeUntilClamped;
+
+			float remainingTime = endtime;
 			string[] timerstr = remainingTime.ToString(CultureInfo.InvariantCulture).Split('.');
 			timerText.text = $"{timerstr[0]}<size=40%>.{timerstr[1].Substring(0, timerstr[1].Length > 2 ? 2 : timerstr[1].Length)}";
 			timerText.color = Color.Lerp(flashColor, originalColor, _ftimer % fadeTime + delay);

@@ -32,6 +32,11 @@ namespace UltrakillTimer
 			_camfollower = _gomc.AddComponent<AlwaysFollowCamera>();
 		}
 
+		public static void DestroyMusicController()
+		{
+			GameObject.Destroy(_gomc);
+		}
+
 		private static GameObject _gomc;
 		private static AudioSource _audiosrc;
 		private static AlwaysFollowCamera _camfollower;

@@ -38,7 +38,7 @@ namespace UltrakillTimer
 			float volmusic = float.Parse(volmsxconvar.InvokeMethod<string>("GetString"), CultureInfo.InvariantCulture) / 100f;
 
 			_volume = volmaster * volmusic;
-			_audiosrc.volume = volmaster * volmusic * _volumemod;
+			_audiosrc.volume = volmaster * volmusic * _volumemod * UltrakillTimerPlugin.MusicVolumeConfig;
 		}
 
 		private void OnDestroy()
@@ -63,6 +63,7 @@ namespace UltrakillTimer
 
 		private IEnumerator ChangeVolumeGradually(float volume, float t)
 		{
+			// TODO: this isnt working somehow and i need to fix it
 			float ct = 0f;
 			float oldvolumemod = _volumemod;
 			while (ct < t)
@@ -70,7 +71,7 @@ namespace UltrakillTimer
 				UltrakillTimerPlugin.LogDebug($"{Time.unscaledDeltaTime} : {ct} / {t} .. {_volumemod} to {volume}");
 				ct += Time.unscaledDeltaTime;
 				_volumemod = Mathf.Lerp(oldvolumemod, volume, ct / t);
-				_audiosrc.volume = _volume * _volumemod;
+				_audiosrc.volume = _volume * _volumemod * UltrakillTimerPlugin.MusicVolumeConfig;
 				yield return new WaitForEndOfFrame();
 			}
 		}
