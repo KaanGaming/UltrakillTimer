@@ -368,13 +368,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlwaysFollowCamera.cs" />
+    <Compile Include="AutoVolumeControl.cs" />
     <Compile Include="MusicController.cs" />
     <Compile Include="PhaseChangeCollisionCheck.cs" />
     <Compile Include="TimerController.cs" />
     <Compile Include="UltrakillTimerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="AssetBundles\ultrakilltimersoundbundle" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AssetBundles\ultrakilltimerbundle" />
   </ItemGroup>

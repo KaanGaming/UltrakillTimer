@@ -11,6 +11,8 @@ using System.Reflection;
 using System.IO;
 using R2API.Utils;
 using MonoMod.RuntimeDetour;
+using UnityEngine.SceneManagement;
+using BepInEx.Logging;
 
 namespace UltrakillTimer
 {
@@ -25,22 +27,54 @@ namespace UltrakillTimer
 		}
 
 		private AssetBundle _ab;
+		private AssetBundle _abm;
 		private GameObject _timer;
 		private GameObject _currenttimer;
 		private Run.FixedTimeStamp _endtime;
 
 		public void Awake()
 		{
-			Logger.LogInfo("Loading asset bundle");
+			_log = Logger;
+
+			Logger.LogInfo("Loading timer asset bundle");
 			_ab = AssetBundle.LoadFromMemory(GetEmbeddedResource("ultrakilltimerbundle"));
 			Logger.LogInfo("Loading timer prefab...");
 			_timer = _ab.LoadAsset<GameObject>("assets/critical failure timer.prefab");
 			Logger.LogInfo($"Loaded prefab {_timer.name} successfully.");
 
+			// TODO: Set up options for the user to disable loading this
+			Logger.LogInfo("Loading escape music asset bundle");
+			_abm = AssetBundle.LoadFromMemory(GetEmbeddedResource("ultrakilltimersoundbundle"));
+			Logger.LogInfo("Loading music...");
+			MusicController.phase1 = _abm.LoadAsset<AudioClip>("assets/centaur b-4.ogg");
+			Logger.LogInfo("Phase 1 music loaded");
+			MusicController.phase2 = _abm.LoadAsset<AudioClip>("assets/centaur b-5.ogg");
+			Logger.LogInfo("Phase 2 music loaded");
+			Logger.LogInfo("Loaded escape music successfully.");
+
 			On.RoR2.EscapeSequenceController.SetHudCountdownEnabled += SetHUDCountdownEnabled;
 			On.RoR2.EscapeSequenceController.EscapeSequenceMainState.OnEnter += EscapeSeqMainStateOnEnter;
 			PhaseChangeCollisionCheck.OnCollisionEnterEvent += OnEnterArenaPortal;
 		}
+
+		#region logging stuff
+		internal static ManualLogSource _log;
+
+		internal static void LogInfo(string msg)
+		{
+			_log.LogInfo(msg);
+		}
+
+		internal static void LogError(string msg)
+		{
+			_log.LogError(msg);
+		}
+
+		internal static void LogWarning(string msg)
+		{
+			_log.LogWarning(msg);
+		}
+		#endregion
 
 		public void Update()
 		{
@@ -52,7 +86,7 @@ namespace UltrakillTimer
 
 		private void OnEnterArenaPortal(GameObject obj)
 		{
-			if (MusicController.InstanceExists())
+			if (MusicController.InstanceExists() && MusicController.currentPhase != 2)
 			{
 				MusicController.PlayPhase(2);
 			}
@@ -62,6 +96,7 @@ namespace UltrakillTimer
 		{
 			orig(self);
 			_endtime = self.GetFieldValue<Run.FixedTimeStamp>("endTime");
+			MusicController.PlayPhase(1);
 		}
 
 		private void SetHUDCountdownEnabled(On.RoR2.EscapeSequenceController.orig_SetHudCountdownEnabled orig, EscapeSequenceController self, RoR2.UI.HUD hud, bool shouldEnableCountdownPanel)
@@ -70,7 +105,7 @@ namespace UltrakillTimer
 			{
 				if (shouldEnableCountdownPanel)
 				{
-					CreateTimer(_endtime);
+					_currenttimer = CreateTimer(_endtime);
 				}
 				else
 				{
@@ -79,13 +114,22 @@ namespace UltrakillTimer
 			}
 		}
 
-		private void CreateTimer(Run.FixedTimeStamp endTime)
+		private GameObject CreateTimer(Run.FixedTimeStamp endTime)
 		{
-			GameObject canvasobj = new GameObject("Timer Canvas");
-			var canvas = canvasobj.AddComponent<Canvas>();
-			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-			canvas.referencePixelsPerUnit = 100;
-			canvas.scaleFactor = 1;
+			GameObject canvasobj = GameObject.Find("Timer Canvas");
+			Canvas canvas;
+			if (canvasobj == null)
+			{
+				canvasobj = new GameObject("Timer Canvas");
+				canvas = canvasobj.AddComponent<Canvas>();
+				canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+				canvas.referencePixelsPerUnit = 100;
+				canvas.scaleFactor = 1;
+			}
+			else
+			{
+				canvas = canvasobj.GetComponent<Canvas>();
+			}
 
 			var timer = GameObject.Instantiate(_timer, canvas.transform);
 			var ctrl = timer.AddComponent<TimerController>();
@@ -94,6 +138,8 @@ namespace UltrakillTimer
 			ctrl.flashColor = new Color(1, 1, 0, 1);
 			ctrl.originalColor = new Color(1, 0, 0, 1);
 			ctrl.timerEnd = endTime;
+
+			return timer;
 		}
 
 		private byte[] GetEmbeddedResource(string name)
