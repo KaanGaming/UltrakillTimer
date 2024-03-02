@@ -19,6 +19,7 @@ using BepInEx.Logging;
 using System.Collections;
 using UltrakillTimer.Utils;
 using BepInEx.Configuration;
+using UnityEngine.UI;
 
 namespace UltrakillTimer
 {
@@ -47,6 +48,7 @@ namespace UltrakillTimer
 		// Visual
 		private static ConfigEntry<bool> OverridePulseBPM { get; set; }
 		private static ConfigEntry<int> CustomPulseBPM { get; set; }
+		private static ConfigEntry<float> BackgroundAlpha { get; set; }
 		private static ConfigEntry<Color> NormalColor { get; set; }
 		private static ConfigEntry<Color> FlashColor { get; set; }
 
@@ -71,6 +73,7 @@ namespace UltrakillTimer
 
 			OverridePulseBPM = Config.Bind<bool>("Visual", "OverridePulseBPM", false, "Whether to override the BPM of the pulsing animation for the timer. The timer pulses every 1/2 beat, and the default BPM is 120 BPM, so 120 BPM = Pulse every 1 second");
 			CustomPulseBPM = Config.Bind<int>("Visual", "CustomPulseBPM", 120, "Refer to the description of Override Pulse BPM");
+			BackgroundAlpha = Config.Bind<float>("Visual", "BackgroundAlpha", 170, "The alpha value/opacity of the background panel of the timer. Default is 220, min is 0, max is 255");
 			NormalColor = Config.Bind<Color>("Visual", "NormalColor", new Color(1, 0, 0, 1), "The normal color the timer uses.");
 			FlashColor = Config.Bind<Color>("Visual", "FlashColor", new Color(1, 1, 0, 1), "The color the timer pulses.");
 
@@ -107,6 +110,17 @@ namespace UltrakillTimer
 				name = "Custom BPM"
 			}));
 
+			ModSettingsManager.AddOption(new StepSliderOption(BackgroundAlpha, new StepSliderConfig
+			{
+				category = "Visual",
+				description = "The alpha value/opacity of the background color on the timer. Default is 220, min is 0 and max is 255.",
+				min = 0,
+				max = 255,
+				increment = 1,
+				formatString = "{0:G}",
+				name = "Background opacity"
+			}));
+
 			ModSettingsManager.AddOption(new ColorOption(NormalColor, new ColorOptionConfig
 			{
 				category = "Visual",
@@ -129,7 +143,7 @@ namespace UltrakillTimer
 				description = "The volume of the music. The music is already affected by the in-game volume sliders, but feel free to adjust the volume of the escape music with this as well! (1.00 is 100%, default is 1.00)",
 				restartRequired = false,
 				min = 0,
-				formatString = "G",
+				formatString = "{0:G}",
 				max = 3f,
 				name = "Escape music volume"
 			}));
@@ -150,9 +164,9 @@ namespace UltrakillTimer
 				increment = 1f,
 			}));
 
-			ModSettingsManager.AddOption(new GenericButtonOption("Preview Timer", "Preview", "Spawn the timer at the top and play the music as well.", "Preview", PreviewTimerWithMusic));
+			ModSettingsManager.AddOption(new GenericButtonOption("Preview Timer", "Preview", "Spawn the timer at the top and play the music as well.\n\n(NOTE: If you want to edit visual settings while previewing, you need to click on this button again to see changes)", "Preview", PreviewTimerWithMusic));
 
-			ModSettingsManager.AddOption(new GenericButtonOption("Preview Timer w/o Music", "Preview", "Spawn the timer at the top but don't play the music.", "Preview", PreviewTimer));
+			ModSettingsManager.AddOption(new GenericButtonOption("Preview Timer w/o Music", "Preview", "Spawn the timer at the top but don't play the music.\n\n(NOTE: If you want to edit visual settings while previewing, you need to click on this button again to see changes)", "Preview", PreviewTimer));
 
 			ModSettingsManager.AddOption(new GenericButtonOption("Destroy Timer Preview", "Preview", "Stops displaying the timer and playing the music.", "Destroy", KillTimer));
 			#endregion
@@ -241,7 +255,7 @@ namespace UltrakillTimer
 			}
 
 			if (_previewTimer != null)
-				GameObject.Destroy(_previewTimer);
+				DestroyTimer(_previewTimer);
 			
 			TestMusic1();
 			CoroutineRunner.RunCoroutine(delaySwitch(), 18f);
@@ -252,7 +266,7 @@ namespace UltrakillTimer
 		private void PreviewTimer()
 		{
 			if (_previewTimer != null)
-				GameObject.Destroy(_previewTimer);
+				DestroyTimer(_previewTimer);
 
 			_previewTime = TimerTimePreview.Value;
 			_previewTimer = CreateTimer(_previewTime);
@@ -260,7 +274,7 @@ namespace UltrakillTimer
 
 		private void KillTimer()
 		{
-			GameObject.Destroy(_previewTimer);
+			DestroyTimer(_previewTimer);
 			StopAllMusic();
 			_preview = false;
 		}
@@ -305,9 +319,16 @@ namespace UltrakillTimer
 				}
 				else
 				{
-					GameObject.Destroy(_currenttimer);
+					DestroyTimer(_currenttimer);
 				}
 			}
+		}
+
+		private void DestroyTimer(GameObject timer)
+		{
+			GameObject parentcanvas = timer.transform.parent.gameObject;
+			GameObject.Destroy(timer);
+			GameObject.Destroy(parentcanvas);
 		}
 
 		private GameObject CreateTimer(Run.FixedTimeStamp endTime)
@@ -328,12 +349,16 @@ namespace UltrakillTimer
 			}
 
 			var timer = GameObject.Instantiate(_timer, canvas.transform);
+			var bgimage = timer.transform.GetChild(0).GetComponent<Image>();
+			bgimage.color = new Color(bgimage.color.r, bgimage.color.g, bgimage.color.b, BackgroundAlpha.Value / 255f);
 			var ctrl = timer.AddComponent<TimerController>();
 			ctrl.delay = 0;
-			ctrl.fadeTime = 1;
-			ctrl.flashColor = new Color(1, 1, 0, 1);
-			ctrl.originalColor = new Color(1, 0, 0, 1);
+			ctrl.fadeTime = OverridePulseBPM.Value ? 120 / CustomPulseBPM.Value : 1;
+			ctrl.flashColor = FlashColor.Value;
+			ctrl.originalColor = NormalColor.Value;
 			ctrl.timerEnd = endTime;
+
+			Logger.LogInfo($"Timer created with {endTime.timeUntilClamped}s, fadeTime = {ctrl.fadeTime}");
 
 			return timer;
 		}
@@ -356,13 +381,17 @@ namespace UltrakillTimer
 			}
 
 			var timer = GameObject.Instantiate(_timer, canvas.transform);
+			var bgimage = timer.transform.GetChild(0).GetComponent<Image>();
+			bgimage.color = new Color(bgimage.color.r, bgimage.color.g, bgimage.color.b, BackgroundAlpha.Value / 255f);
 			var ctrl = timer.AddComponent<TimerController>();
 			ctrl.delay = 0;
-			ctrl.fadeTime = 1;
-			ctrl.flashColor = new Color(1, 1, 0, 1);
-			ctrl.originalColor = new Color(1, 0, 0, 1);
+			ctrl.fadeTime = OverridePulseBPM.Value ? 120f / CustomPulseBPM.Value : 1;
+			ctrl.flashColor = FlashColor.Value;
+			ctrl.originalColor = NormalColor.Value;
 			ctrl.useCustomTimerEnd = true;
 			ctrl.customTimerEnd = endTime;
+
+			Logger.LogInfo($"Timer created with {endTime}s, fadeTime = {ctrl.fadeTime}");
 
 			return timer;
 		}

@@ -1,10 +1,14 @@
-# UltrakillTimer
+﻿# UltrakillTimer
 
 UltrakillTimer is a game modification developed for Risk of Rain 2 that replaces the escape countdown in Commencement with the **<u>CRITICAL FAILURE</u>** timer found in 7-4 from ULTRAKILL.
 
 # Media
 
 ###### TODO: add VIDEO showing off the COOL and AMAZING timer alongside the musci...
+
+# Donation
+
+You can [buy me a coffee](https://www.buymeacoffee.com/kaangamgimginnkagnagnking) if you want, for $2 each! I **HUGELY** appreciate donations, and I can assure you that your money won't go to waste! ...Probably.
 
 # Licensing
 
