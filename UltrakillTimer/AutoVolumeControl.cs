@@ -30,6 +30,19 @@ namespace UltrakillTimer
 		private float _volume;
 		private float _volumemod;
 
+		public static float GetVolume()
+		{
+			var volmastera = typeof(RoR2.AudioManager).GetField("cvVolumeMaster", BindingFlags.NonPublic | BindingFlags.Static);
+			var volmusica = typeof(RoR2.AudioManager).GetField("cvVolumeMsx", BindingFlags.NonPublic | BindingFlags.Static);
+
+			object volmasterconvar = volmastera.GetValue(null);
+			float volmaster = float.Parse(volmasterconvar.InvokeMethod<string>("GetString"), CultureInfo.InvariantCulture) / 100f;
+			object volmsxconvar = volmusica.GetValue(null);
+			float volmusic = float.Parse(volmsxconvar.InvokeMethod<string>("GetString"), CultureInfo.InvariantCulture) / 100f;
+
+			return (UltrakillTimerPlugin.IgnoreIGVolume ? 1 : volmusic) * volmaster;
+		}
+
 		private void Update()
 		{
 			object volmasterconvar = _volmaster.GetValue(null); // the classes are PRIVATE so we have to use object because we cant use the subclass
@@ -37,8 +50,8 @@ namespace UltrakillTimer
 			object volmsxconvar = _volmusic.GetValue(null);
 			float volmusic = float.Parse(volmsxconvar.InvokeMethod<string>("GetString"), CultureInfo.InvariantCulture) / 100f;
 
-			_volume = volmaster * volmusic;
-			_audiosrc.volume = volmaster * volmusic * _volumemod * UltrakillTimerPlugin.MusicVolumeConfig;
+			_volume = volmaster * (UltrakillTimerPlugin.IgnoreIGVolume ? 1 : volmusic);
+			_audiosrc.volume = volmaster * (UltrakillTimerPlugin.IgnoreIGVolume ? 1 : volmusic) * _volumemod * UltrakillTimerPlugin.MusicVolumeConfig;
 		}
 
 		private void OnDestroy()

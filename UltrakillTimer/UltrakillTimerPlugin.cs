@@ -25,7 +25,7 @@ namespace UltrakillTimer
 {
 	[NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
 	[BepInDependency("com.rune580.riskofoptions")]
-	[BepInPlugin("com.kanggamming.ultrakilltimer", "ULTRAKILL Timer", "0.1.0")]
+	[BepInPlugin("com.kanggamming.ultrakilltimer", "ULTRAKILL Timer", "1.0.0")]
     public class UltrakillTimerPlugin
 		: BaseUnityPlugin
     {
@@ -54,15 +54,15 @@ namespace UltrakillTimer
 
 		// Music
 		private static ConfigEntry<float> MusicVolume { get; set; }
+		private static ConfigEntry<bool> IgnoreInGameMusicVolume { get; set; }
 
 		// Misc
 		private static ConfigEntry<float> TimerTimePreview { get; set; }
 		#endregion
 
-		internal static float MusicVolumeConfig
-		{
-			get => MusicVolume.Value;
-		}
+		internal static float MusicVolumeConfig => MusicVolume.Value;
+
+		internal static bool IgnoreIGVolume => IgnoreInGameMusicVolume.Value;
 
 		public void Awake()
 		{
@@ -78,6 +78,7 @@ namespace UltrakillTimer
 			FlashColor = Config.Bind<Color>("Visual", "FlashColor", new Color(1, 1, 0, 1), "The color the timer pulses.");
 
 			MusicVolume = Config.Bind<float>("Music", "MusicVolume", 1f, "The volume of the music. The music is already affected by the in-game volume sliders, but feel free to adjust the volume of the escape music with this as well!");
+			IgnoreInGameMusicVolume = Config.Bind<bool>("Music", "IgnoreInGameMusicVolume", false, "If true, ignores the in-game volume.");
 			TimerTimePreview = Config.Bind<float>("Misc", "TimerTimePreview", 80f, "Used for in-game settings menu made with Risk of Options, please ignore");
 			#endregion
 
@@ -87,7 +88,7 @@ namespace UltrakillTimer
 			ModSettingsManager.AddOption(new CheckBoxOption(LoadMusicBundle, new CheckBoxConfig
 			{
 				category = "General",
-				description = "Whether to load the music bundle. This is required to play the music from 7-4 in ULTRAKILL while escaping the moon. Only affects startup, so restarting the game is required to toggle this option.",
+				description = "Whether to load the music bundle. This is required to play the music from 7-4 in ULTRAKILL while escaping the moon. Only affects startup, so restarting the game is required to toggle this option.\n\n(This option is really pointless as of now, but maybe it'll have a use in a future update.)",
 				restartRequired = true,
 				name = "Load music bundle on start"
 			}));
@@ -146,6 +147,14 @@ namespace UltrakillTimer
 				formatString = "{0:G}",
 				max = 3f,
 				name = "Escape music volume"
+			}));
+
+			ModSettingsManager.AddOption(new CheckBoxOption(IgnoreInGameMusicVolume, new CheckBoxConfig
+			{
+				category = "Music",
+				description = "Ignore the value of the music volume found in the Audio page in the actual Risk of Rain 2 settings page.",
+				restartRequired = false,
+				name = "Ignore in-game music volume"
 			}));
 
 			ModSettingsManager.AddOption(new GenericButtonOption("Preview Music 1", "Preview", "Listen to the first phase of the escape music, played right after the moon detonation becomes imminent and before you enter one of the portals to escape the arena.", "Play", TestMusic1));

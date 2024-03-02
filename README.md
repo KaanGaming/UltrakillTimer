@@ -4,7 +4,14 @@ UltrakillTimer is a game modification developed for Risk of Rain 2 that replaces
 
 # Media
 
-###### TODO: add VIDEO showing off the COOL and AMAZING timer alongside the musci...
+# Mod Showcase
+###### (the audio glitch isn't present in the final release)
+[![](./assets/thumbnail.png)](https://youtu.be/QxlvSXXNZuo)
+
+# Settings Page
+This mod supports Risk of Options
+
+![](./assets/settingspage.png)
 
 # Donation
 

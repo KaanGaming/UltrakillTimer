@@ -78,7 +78,7 @@ namespace UltrakillTimer
 				if (!success)
 					logerr($"FAILURE!!!!!!!!! load state ended up to be {phase1.loadState}");
 				else
-					log($"Loaded phase 1 audio data successfully");
+					log($"Loaded phase 2 audio data successfully");
 			}
 		}
 
@@ -100,6 +100,7 @@ namespace UltrakillTimer
 				CreateMusicController();
 
 			_audiosrc.clip = clip;
+			_audiosrc.volume = AutoVolumeControl.GetVolume();
 			_audiosrc.Play();
 		}
 

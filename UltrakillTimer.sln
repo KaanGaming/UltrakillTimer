@@ -8,8 +8,20 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1974DCD4-BCED-41C1-B6C7-FA3A90FA7176}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		CHANGELOG.md = CHANGELOG.md
+		icon.png = icon.png
 		LICENSE.txt = LICENSE.txt
+		manifest.json = manifest.json
 		README.md = README.md
+	EndProjectSection
+	ProjectSection(FolderGlobals) = preProject
+		G_5_4kaan_4Projeler_4UltrakillTimer_4manifest_1json__JsonSchema = 
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{E93BB53C-6953-4986-A6A0-9C9D8B16A99F}"
+	ProjectSection(SolutionItems) = preProject
+		assets\settingspage.png = assets\settingspage.png
+		assets\thumbnail.png = assets\thumbnail.png
 	EndProjectSection
 EndProject
 Global
@@ -25,6 +37,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E93BB53C-6953-4986-A6A0-9C9D8B16A99F} = {1974DCD4-BCED-41C1-B6C7-FA3A90FA7176}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {536CFE3A-8CD0-46A8-B3ED-031A262F834F}
