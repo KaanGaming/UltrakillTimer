@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace UltrakillTimer.Utils
 {
+	// TODO: this isn't even necessary because apparently you can just run coroutines in
+	// baseunityplugin so remove it and hope i also don't procrastinate removing it this time
 	public class CoroutineRunner : MonoBehaviour
 	{
 		public static void RunCoroutine(IEnumerator coroutine, float destroytimer)

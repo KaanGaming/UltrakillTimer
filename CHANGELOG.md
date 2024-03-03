@@ -1,6 +1,6 @@
 ﻿# ~ ULTRAKILL Timer Changelog ~
 
-# 1.0.0 Release
+# 0.1.0 Release
 
 - Added the timer itself
 - Added customization options such as
