@@ -16,12 +16,12 @@ This mod is client-side and completely visual, and it is compatible with any mod
 
 ###### (click for video)
 
-[![](./assets/thumbnail.png)](https://youtu.be/QxlvSXXNZuo)
+[![](https://i.ibb.co/4t0qy0y/settingspage.png)](https://youtu.be/QxlvSXXNZuo)
 
 # Settings Page
 This mod supports Risk of Options
 
-![](./assets/settingspage.png)
+![](https://i.ibb.co/gjy7NTp/thumbnail.png)
 
 # Donation
 

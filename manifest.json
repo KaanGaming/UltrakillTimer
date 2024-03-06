@@ -1,6 +1,6 @@
 {
   "name": "Ultrakill_Timer",
-  "version_number": "0.1.0",
+  "version_number": "0.1.11",
   "website_url": "https://github.com/kaangaming/UltrakillTimer",
   "description": "A mod for Risk of Rain 2 that grabs the countdown timer / critical failure timer from ULTRAKILL and slaps it onto the moon escape sequence on Commencement after beating Mithrix.",
   "dependencies": [
