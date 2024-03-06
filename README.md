@@ -1,5 +1,9 @@
 ﻿# UltrakillTimer
 
+![Thunderstore Likes](https://img.shields.io/thunderstore/likes/kanggamming/Ultrakill_Timer?label=thunderstore.io%20likes&style=flat&color=deepskyblue)
+![GitHub Repo stars](https://img.shields.io/github/stars/kaangaming/UltrakillTimer?style=flat&label=repo%20stars&color=white)
+
+
 UltrakillTimer is a game modification developed for Risk of Rain 2 that replaces the escape countdown in Commencement with the **CRITICAL FAILURE** timer found in ULTRAKILL.
 
 This mod is client-side and completely visual, and it is compatible with any mod that may change the escape countdown's duration.
