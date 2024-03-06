@@ -1,4 +1,4 @@
-﻿# ~ ULTRAKILL Timer Changelog ~
+# ~ ULTRAKILL Timer Changelog ~
 
 # 0.1.0 Release
 

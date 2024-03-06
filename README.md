@@ -1,4 +1,4 @@
-﻿# UltrakillTimer
+# UltrakillTimer
 
 ![Thunderstore Likes](https://img.shields.io/thunderstore/likes/kanggamming/Ultrakill_Timer?label=thunderstore.io%20likes&style=flat&color=deepskyblue)
 ![GitHub Repo stars](https://img.shields.io/github/stars/kaangaming/UltrakillTimer?style=flat&label=repo%20stars&color=white)
