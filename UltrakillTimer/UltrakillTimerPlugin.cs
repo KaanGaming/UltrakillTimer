@@ -290,10 +290,10 @@ namespace UltrakillTimer
 
 		public void Update()
 		{
-			if (Input.GetKeyDown(KeyCode.P))
-			{
-				CreateTimer(Run.FixedTimeStamp.now + 80f);
-			}
+			//if (Input.GetKeyDown(KeyCode.P))
+			//{
+			//    CreateTimer(Run.FixedTimeStamp.now + 80f);
+			//}
 		}
 
 		private void OnEnterArenaPortal(GameObject obj)
