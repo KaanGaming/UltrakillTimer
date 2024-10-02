@@ -16,21 +16,21 @@ This mod is client-side and completely visual, and it is compatible with any mod
 
 ###### (click for video)
 
-[![](https://i.ibb.co/4t0qy0y/settingspage.png)](https://youtu.be/QxlvSXXNZuo)
+[![](https://i.ibb.co/gjy7NTp/thumbnail.png)](https://youtu.be/QxlvSXXNZuo)
 
 # Settings Page
-This mod supports Risk of Options
+This mod supports [Risk of Options](https://thunderstore.io/package/Rune580/Risk_Of_Options/)
 
-![](https://i.ibb.co/gjy7NTp/thumbnail.png)
+![](https://i.ibb.co/4t0qy0y/settingspage.png)
 
-# Donation
+## Support
 
-You can [buy me a coffee](https://www.buymeacoffee.com/kaangamgimginnkagnagnking) if you want, for $2 each! I **HUGELY** appreciate donations, and I can assure you that your money won't go to waste! ...Probably.
+Like my work? Please consider supporting on [Buy me a coffee](https://buymeacoffee.com/kaangamgimginnkagnagnking)!
+
+[<img src="./assets/blue-button.png" alt="Buy me a coffee for $2!" height="48"/>](https://buymeacoffee.com/kaangamgimginnkagnagnking)
 
 # Licensing
 
-(May change)
-
 This project's **code** uses the [MIT License](../LICENSE.txt).
 
-The licensing above **DOES NOT** cover the music files extracted from ULTRAKILL. The music not covered by the license, therefore not owned by me in any form, is produced by [Heaven Pierce Her](https://heavenpierceher.bandcamp.com/album/ultrakill-violence). The font used inside the mod, [VCR OSD Mono](https://www.dafont.com/vcr-osd-mono.font), is designed by [Riciery Santos Leal](https://www.dafont.com/mrmanet.d5509).
+The licensing above **DOES NOT** cover the music files extracted from ULTRAKILL, nor does it cover the font used inside the mod. The music not covered by the license, therefore not owned by me in any form, is produced by [Heaven Pierce Her](https://heavenpierceher.bandcamp.com/album/ultrakill-violence). The font used inside the mod, [VCR OSD Mono](https://www.dafont.com/vcr-osd-mono.font), is designed by [Riciery Santos Leal](https://www.dafont.com/mrmanet.d5509).

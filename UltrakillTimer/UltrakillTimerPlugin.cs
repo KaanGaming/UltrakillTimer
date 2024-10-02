@@ -25,7 +25,8 @@ namespace UltrakillTimer
 {
 	[NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
 	[BepInDependency("com.rune580.riskofoptions")]
-	[BepInPlugin("com.kanggamming.ultrakilltimer", "ULTRAKILL Timer", "0.1.0")]
+	[BepInDependency("com.bepis.r2api")]
+	[BepInPlugin("com.kanggamming.ultrakilltimer", "ULTRAKILL Timer", "0.1.3")]
     public class UltrakillTimerPlugin
 		: BaseUnityPlugin
     {
